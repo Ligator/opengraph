@@ -20,7 +20,9 @@ module OpenGraph
     page = OpenGraph::Object.new
     doc.css('meta').each do |m|
       if m.attribute('property') && m.attribute('property').to_s.match(/^og:(.+)$/i)
-        page[$1.gsub('-','_')] = m.attribute('content').to_s
+        key = $1.gsub('-','_')
+        value = m.attribute('content').to_s
+        page[key] ? page[key].is_a?(Array) ? page[key]<<value : page[key]=[page[key]]<<value : page[key]=value
       end
     end
     return false if page.keys.empty?
